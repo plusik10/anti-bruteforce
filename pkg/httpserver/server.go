@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/golangci/golangci-lint/pkg/config"
+	"github.com/plusik10/anti-bruteforce/config"
 )
 
 type Server struct {
