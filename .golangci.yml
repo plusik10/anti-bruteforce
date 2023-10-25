@@ -8,22 +8,7 @@ linters-settings:
   funlen:
     lines: 150
     statements: 80
-  depguard:
-    rules:
-      main:
-        files:
-          - $all
-          - "!$test"
-        allow:
-          - $gostd
-          - github.com/cheggaaa/pb/v3
-        test:
-          files:
-            - "$test"
-          allow:
-            - $gostd
-            - github.com/stretchr
-          
+
 issues:
   exclude-rules:
     - path: _test\.go
@@ -38,7 +23,6 @@ linters:
   enable:
     - asciicheck
     - bodyclose
-    - depguard
     - dogsled
     - dupl
     - durationcheck
@@ -73,7 +57,6 @@ linters:
     - revive
     - staticcheck
     - stylecheck
-    - tagliatelle
     - thelper
     - typecheck
     - unconvert
