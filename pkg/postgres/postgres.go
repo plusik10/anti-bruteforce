@@ -25,7 +25,6 @@ type Postgres struct {
 }
 
 func New(url string) (*Postgres, error) {
-
 	pg := &Postgres{
 		maxPoolSize:  _defaultMaxPoolSize,
 		connAttempts: _defaultConnAttempts,
@@ -53,5 +52,4 @@ func New(url string) (*Postgres, error) {
 		return nil, fmt.Errorf("postgres - NewPostgres - connAttempts == 0; %w", err)
 	}
 	return pg, nil
-
 }

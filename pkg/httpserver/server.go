@@ -30,7 +30,6 @@ func New(cfg config.Config, handler http.Handler) *Server {
 
 	s.start()
 	return s
-
 }
 
 func (s *Server) start() {

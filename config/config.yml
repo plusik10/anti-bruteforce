@@ -8,10 +8,8 @@ logger:
   log_level: 'debug'
 postgres:
   pool_max: 2
-  url: "none" #postgres://...
+  url: "none" #postgres://... 
 backet_limit:
   login_limit: 3
   password_limit: 10
   ip_limit: 1000
-
-
