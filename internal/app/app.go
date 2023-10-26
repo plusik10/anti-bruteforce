@@ -1,4 +1,7 @@
 package app
 
-func Run() {
+import "github.com/plusik10/anti-bruteforce/config"
+
+func Run(cfg *config.Config) {
+
 }
