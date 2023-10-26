@@ -6,7 +6,6 @@ import (
 )
 
 type ipManageRoute struct {
-
 	l logger.Interface
 }
 

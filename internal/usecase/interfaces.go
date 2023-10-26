@@ -9,9 +9,9 @@ import (
 type (
 	NetManager interface {
 		Auth(ctx context.Context, net entity.Net) (bool, error)
-		AddIpToBlackList(ctx context.Context, ip string) error
+		AddIPToBlackList(ctx context.Context, ip string) error
 		DeleteFromBlackList(ctx context.Context, ip string) error
-		AddIpToWhiteList(ctx context.Context, ip string) error
+		AddIPToWhiteList(ctx context.Context, ip string) error
 		DeleteFromWhiteList(ctx context.Context, ip string) error
 		ClearBucket() error
 	}
