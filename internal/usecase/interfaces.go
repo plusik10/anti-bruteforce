@@ -17,7 +17,7 @@ type (
 	}
 
 	NetManagerRepo interface {
-		Upsert(ctx context.Context, ip string, isBlack bool) error
-		RemoveIp(ctx context.Context, ip string)
+		InsertIP(ctx context.Context, ip string, isBlock bool) error
+		RemoveIP(ctx context.Context, ip string) error
 	}
 )
