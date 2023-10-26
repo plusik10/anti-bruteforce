@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+
 	"github.com/plusik10/anti-bruteforce/internal/entity"
 )
 

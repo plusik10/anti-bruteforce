@@ -1,9 +1,10 @@
 package main
 
 import (
+	"log"
+
 	"github.com/plusik10/anti-bruteforce/config"
 	"github.com/plusik10/anti-bruteforce/internal/app"
-	"log"
 )
 
 func main() {
