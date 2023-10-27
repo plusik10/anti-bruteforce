@@ -18,25 +18,66 @@ type doRequest struct {
 
 func NewIPManageRoute(handler *gin.RouterGroup, n usecase.NetManager, l logger.Interface) {
 	route := &ipManageRoute{n, l}
-	_ = route // TODO: REMOVE
 	h := handler.Group("/ip")
 	{
-		h.POST("/add-to-blacklist", route.addToBlackList) // TODO: REMOVE
-		h.POST("/tset")                                   // TODO: REMOVE
+		h.GET("/help-method")
+		h.GET("/auth-attempt")  // TODO: implement
+		h.POST("/bucket-clean") //TODO: implement
+
+		h.POST("/add-to-blacklist", route.addToBlackList)
+		h.DELETE("/delete-from-blacklist", route.deleteIPFromList)
+		h.POST("/add-to-whitelist", route.addToWhiteList)
+		h.DELETE("/delete-from-whitelist", route.deleteIPFromList)
 	}
+}
+
+func (i *ipManageRoute) help(c *gin.Context) {
+	c.JSON(http.StatusOK, "/add-to-blacklist, /delete-from-blacklist, /add-to-whitelist, /delete-from-whitelist")
+}
+
+func (i *ipManageRoute) deleteIPFromList(c *gin.Context) {
+	var request doRequest
+	if err := c.ShouldBindJSON(&request); err != nil {
+		i.l.Error(err, "http-v1-deleteIPFromList - doRequest")
+		c.AbortWithStatusJSON(500, err.Error())
+		return
+	}
+	err := i.netManger.DeleteIpFromStorage(c.Request.Context(), request.IP)
+	if err != nil {
+		i.l.Error(err, "http - v1 -deleteIPFromList - netManger.DeleteFromBlackList")
+		c.AbortWithStatusJSON(500, err.Error())
+		return
+	}
+	c.JSON(http.StatusOK, "ok")
+}
+
+func (i *ipManageRoute) addToWhiteList(c *gin.Context) {
+	var request doRequest
+	if err := c.ShouldBindJSON(&request); err != nil {
+		i.l.Error(err, "http-v1-addToWhiteList - doRequest")
+		c.AbortWithStatusJSON(500, err.Error())
+		return
+	}
+	err := i.netManger.AddIPToWhiteList(c.Request.Context(), request.IP)
+	if err != nil {
+		i.l.Error(err, "http - v1 -addToWhiteList - netManger.AddIPToWhiteList")
+		c.AbortWithStatusJSON(500, err.Error())
+		return
+	}
+	c.JSON(http.StatusOK, "ok")
 }
 
 func (i *ipManageRoute) addToBlackList(c *gin.Context) {
 	var request doRequest
 
 	if err := c.ShouldBindJSON(&request); err != nil {
-		i.l.Error(err, "http-v1-doRequest")
+		i.l.Error(err, "http-v1-addToBlackList - doRequest")
 		c.AbortWithStatusJSON(500, err.Error())
 		return
 	}
 	err := i.netManger.AddIPToBlackList(c.Request.Context(), request.IP)
 	if err != nil {
-		i.l.Error(err, "http - v1 - doTranslate")
+		i.l.Error(err, "http - v1 -addToBlackList - netManger.AddIPToBlacklist")
 		c.AbortWithStatusJSON(500, err.Error())
 		return
 	}

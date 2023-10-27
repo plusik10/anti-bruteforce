@@ -40,7 +40,11 @@ func (n *NetManagerPostgresRepo) InsertIP(ctx context.Context, ip string, isBloc
 }
 
 func (n *NetManagerPostgresRepo) RemoveIP(ctx context.Context, ip string) error {
-	sql, args, err := n.Builder.Delete("").From("ip_list").Where("ip=", ip).ToSql()
+	sql, args, err := n.Builder.
+		Delete("").
+		From("ip_list").
+		Where("ip=", ip).
+		ToSql()
 	if err != nil {
 		return fmt.Errorf("NetManagerRepo - RemoveIp - n.Builder: %w", err)
 	}
