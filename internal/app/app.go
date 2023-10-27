@@ -2,9 +2,6 @@ package app
 
 import (
 	"fmt"
-	"github.com/plusik10/anti-bruteforce/internal/usecase"
-	"github.com/plusik10/anti-bruteforce/internal/usecase/repo"
-	"github.com/plusik10/anti-bruteforce/pkg/postgres"
 	"os"
 	"os/signal"
 	"syscall"
@@ -12,8 +9,11 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/plusik10/anti-bruteforce/config"
 	v1 "github.com/plusik10/anti-bruteforce/internal/controller/http/v1"
+	"github.com/plusik10/anti-bruteforce/internal/usecase"
+	"github.com/plusik10/anti-bruteforce/internal/usecase/repo"
 	"github.com/plusik10/anti-bruteforce/pkg/httpserver"
 	"github.com/plusik10/anti-bruteforce/pkg/logger"
+	"github.com/plusik10/anti-bruteforce/pkg/postgres"
 )
 
 func Run(cfg *config.Config) {

@@ -3,9 +3,10 @@ package repo
 import (
 	"context"
 	"fmt"
+	"log"
+
 	"github.com/plusik10/anti-bruteforce/internal/usecase"
 	"github.com/plusik10/anti-bruteforce/pkg/postgres"
-	"log"
 )
 
 var _ usecase.NetManagerRepo = (*NetManagerPostgresRepo)(nil)
@@ -28,14 +29,13 @@ func (n *NetManagerPostgresRepo) InsertIP(ctx context.Context, ip string, isBloc
 		Insert("ip_list").
 		Columns("ip, block_ip").
 		Values(ip, isBlockInt).ToSql()
-
 	if err != nil {
 		return fmt.Errorf("NetManagerRepo - Upsert - n.Builder: %w", err)
 	}
 	_, err = n.Pool.Exec(ctx, sql, args[0], args[1])
 
 	if err != nil {
-		return fmt.Errorf("NetManagerRepo - Upsert - n.PoolExec: %w query: %s, %s", err, sql, args)
+		return fmt.Errorf("NetManagerRepo - Upsert - n.PoolExec: %w query: %s ", err, sql)
 	}
 	return nil
 }
@@ -46,14 +46,13 @@ func (n *NetManagerPostgresRepo) RemoveIP(ctx context.Context, ip string) error 
 		Delete("").
 		From("ip_list").
 		Where("ip=?", ip).ToSql()
-
 	if err != nil {
 		return fmt.Errorf("NetManagerRepo - RemoveIp - n.Builder: %w, sql = %s", err, sql)
 	}
 
 	_, err = n.Pool.Exec(ctx, sql, args[0])
 	if err != nil {
-		return fmt.Errorf("NetManagerRepo - RemoveIp - n.PoolExec: %w, query = %s", err)
+		return fmt.Errorf("NetManagerRepo - RemoveIp - n.PoolExec: %w", err)
 	}
 	return nil
 }

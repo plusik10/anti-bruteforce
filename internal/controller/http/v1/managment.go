@@ -1,10 +1,11 @@
 package v1
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/plusik10/anti-bruteforce/internal/usecase"
 	"github.com/plusik10/anti-bruteforce/pkg/logger"
-	"net/http"
 )
 
 type ipManageRoute struct {
@@ -20,19 +21,14 @@ func NewIPManageRoute(handler *gin.RouterGroup, n usecase.NetManager, l logger.I
 	route := &ipManageRoute{n, l}
 	h := handler.Group("/ip")
 	{
-		h.GET("/help-method")
 		h.GET("/auth-attempt")  // TODO: implement
-		h.POST("/bucket-clean") //TODO: implement
+		h.POST("/bucket-clean") // TODO: implement
 
 		h.POST("/add-to-blacklist", route.addToBlackList)
 		h.DELETE("/delete-from-blacklist", route.deleteIPFromList)
 		h.POST("/add-to-whitelist", route.addToWhiteList)
 		h.DELETE("/delete-from-whitelist", route.deleteIPFromList)
 	}
-}
-
-func (i *ipManageRoute) help(c *gin.Context) {
-	c.JSON(http.StatusOK, "/add-to-blacklist, /delete-from-blacklist, /add-to-whitelist, /delete-from-whitelist")
 }
 
 func (i *ipManageRoute) deleteIPFromList(c *gin.Context) {
@@ -42,7 +38,7 @@ func (i *ipManageRoute) deleteIPFromList(c *gin.Context) {
 		c.AbortWithStatusJSON(500, err.Error())
 		return
 	}
-	err := i.netManger.DeleteIpFromStorage(c.Request.Context(), request.IP)
+	err := i.netManger.DeleteIPFromStorage(c.Request.Context(), request.IP)
 	if err != nil {
 		i.l.Error(err, "http - v1 -deleteIPFromList - netManger.DeleteFromBlackList")
 		c.AbortWithStatusJSON(500, err.Error())

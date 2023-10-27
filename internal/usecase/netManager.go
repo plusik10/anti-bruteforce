@@ -12,8 +12,9 @@ type NetManagerUsecase struct {
 	repo NetManagerRepo
 }
 
-func (n NetManagerUsecase) DeleteIpFromStorage(ctx context.Context, ip string) error {
-	if err := n.repo.RemoveIP(ctx, ip); err != nil {
+func (n NetManagerUsecase) DeleteIPFromStorage(ctx context.Context, ip string) error {
+	err := n.repo.RemoveIP(ctx, ip)
+	if err != nil {
 		return err
 	}
 	return nil
