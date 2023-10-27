@@ -14,7 +14,7 @@ type Server struct {
 	shutdownTimeout time.Duration
 }
 
-func New(cfg config.Config, handler http.Handler) *Server {
+func New(cfg *config.Config, handler http.Handler) *Server {
 	httpServer := &http.Server{
 		Handler:      handler,
 		ReadTimeout:  cfg.HTTP.Timeout,

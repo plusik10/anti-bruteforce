@@ -1,5 +1,5 @@
 CREATE TABLE ip_list(
-    id integer primary key not null,
+    id SERIAL PRIMARY KEY,
     ip varchar(64),
     block_ip integer
 )
