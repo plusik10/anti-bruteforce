@@ -3,7 +3,6 @@ package repo
 import (
 	"context"
 	"fmt"
-
 	"github.com/plusik10/anti-bruteforce/internal/usecase"
 	"github.com/plusik10/anti-bruteforce/pkg/postgres"
 )
@@ -19,20 +18,23 @@ func NewPostgres(pg *postgres.Postgres) *NetManagerPostgresRepo {
 }
 
 func (n *NetManagerPostgresRepo) InsertIP(ctx context.Context, ip string, isBlock bool) error {
-	insert := n.Builder.Insert("ip_list")
+	var isBlockInt int
 	if isBlock {
-		insert = insert.Columns("ip,block_ip").Values(ip, 1)
-	} else {
-		insert = insert.Columns("ip").Values(ip)
+		isBlockInt = 1
 	}
 
-	sql, args, err := insert.ToSql()
+	sql, args, err := n.Builder.
+		Insert("ip_list").
+		Columns("ip, block_ip").
+		Values(ip, isBlockInt).ToSql()
+
 	if err != nil {
 		return fmt.Errorf("NetManagerRepo - Upsert - n.Builder: %w", err)
 	}
-	_, err = n.Pool.Exec(ctx, sql, args)
+	_, err = n.Pool.Exec(ctx, sql, args[0], args[1])
+
 	if err != nil {
-		return fmt.Errorf("NetManagerRepo - Upsert - n.PoolExec: %w", err)
+		return fmt.Errorf("NetManagerRepo - Upsert - n.PoolExec: %w query: %s, %s", err, sql, args)
 	}
 	return nil
 }

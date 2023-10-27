@@ -2,6 +2,9 @@ package app
 
 import (
 	"fmt"
+	"github.com/plusik10/anti-bruteforce/internal/usecase"
+	"github.com/plusik10/anti-bruteforce/internal/usecase/repo"
+	"github.com/plusik10/anti-bruteforce/pkg/postgres"
 	"os"
 	"os/signal"
 	"syscall"
@@ -15,9 +18,17 @@ import (
 
 func Run(cfg *config.Config) {
 	// TODO: Init usecase -> NewRouter
-	handler := gin.New()
+
 	l := logger.New(cfg.Log.Level)
-	v1.NewRouter(handler, l)
+
+	pg, err := postgres.New("postgres://postgres:qwerty123@localhost:5432/anti-bruteforce")
+	if err != nil {
+		l.Fatal(err, " postgres is not init")
+	}
+	repository := repo.NewPostgres(pg)
+	NetUsecase := usecase.NewNetManagerUsecase(repository)
+	handler := gin.New()
+	v1.NewRouter(handler, NetUsecase, l)
 	httpServer := httpserver.New(cfg, handler)
 
 	// Waiting signal
