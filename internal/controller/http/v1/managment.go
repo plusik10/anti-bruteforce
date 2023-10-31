@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/plusik10/anti-bruteforce/internal/entity"
 	"github.com/plusik10/anti-bruteforce/internal/usecase"
 	"github.com/plusik10/anti-bruteforce/pkg/logger"
 )
@@ -21,14 +22,25 @@ func NewIPManageRoute(handler *gin.RouterGroup, n usecase.NetManager, l logger.I
 	route := &ipManageRoute{n, l}
 	h := handler.Group("/ip")
 	{
-		h.GET("/auth-attempt")  // TODO: implement
-		h.POST("/bucket-clean") // TODO: implement
+		h.GET("/auth-attempt", route.auth) // TODO: implement
+		h.POST("/bucket-clean")            // TODO: implement
 
 		h.POST("/add-to-blacklist", route.addToBlackList)
 		h.DELETE("/delete-from-blacklist", route.deleteIPFromList)
 		h.POST("/add-to-whitelist", route.addToWhiteList)
 		h.DELETE("/delete-from-whitelist", route.deleteIPFromList)
 	}
+}
+
+func (i *ipManageRoute) auth(c *gin.Context) {
+	net := entity.Net{IP: "127.0.0.1", Login: "login", Password: "ip"}
+
+	_, err := i.netManger.Auth(c.Request.Context(), net)
+	if err != nil {
+		i.l.Error(err, "http - v1 - auth")
+		c.AbortWithStatusJSON(500, err.Error())
+	}
+	c.JSON(http.StatusOK, "ok")
 }
 
 func (i *ipManageRoute) deleteIPFromList(c *gin.Context) {

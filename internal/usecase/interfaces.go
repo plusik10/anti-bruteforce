@@ -16,6 +16,8 @@ type (
 	}
 
 	NetManagerRepo interface {
+		CheckIPToWhiteList(ctx context.Context, ip string) error
+		CheckIPToBlackList(ctx context.Context, ip string) error
 		InsertIP(ctx context.Context, ip string, isBlock bool) error
 		RemoveIP(ctx context.Context, ip string) error
 	}

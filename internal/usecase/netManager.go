@@ -21,8 +21,11 @@ func (n NetManagerUsecase) DeleteIPFromStorage(ctx context.Context, ip string) e
 }
 
 func (n NetManagerUsecase) Auth(ctx context.Context, net entity.Net) (bool, error) {
-	_, _ = ctx, net // TODO: REMOVE
-	panic("implement me")
+	err := n.repo.CheckIPToWhiteList(ctx, net.IP)
+	if err != nil {
+		return false, err
+	}
+	return true, nil
 }
 
 func (n *NetManagerUsecase) AddIPToBlackList(ctx context.Context, ip string) error {
