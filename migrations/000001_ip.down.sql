@@ -1,1 +1,2 @@
 DROP TABLE IF EXISTS ip_list;
+DROP TABLE IF EXISTS bucket;
